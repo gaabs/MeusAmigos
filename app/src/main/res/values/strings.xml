@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MeusAmigos</string>
+    <string name="categories">Categorias</string>
+    <string name="friends">Amigos</string>
+
+    <string name="add_category">Adicionar categoria</string>
+    <string name="name">Nome</string>
+    <string name="color">Cor</string>
+    <string name="choose_picture">Escolher foto</string>
+    <string name="add">Adicionar</string>
+
+    <string name="add_friend">Adicionar amigo</string>
+    <string name="phone">Telefone</string>
+    <string name="category">Categoria</string>
+
+    <string name="edit_friend">Modificar amigo</string>
+    <string name="remove">Remover</string>
+    <string name="save">Salvar</string>
+</resources>

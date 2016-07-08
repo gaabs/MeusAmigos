@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -48,5 +49,16 @@ public class FriendListActivity extends AppCompatActivity {
 
         ListView friendListView = (ListView) findViewById(R.id.friends_listView);
         friendListView.setAdapter(friendListAdapter);
+        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Friend friend = (Friend) adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(FriendListActivity.this, FriendEditActivity.class);
+
+                intent.putExtra("name",friend.getName());
+
+                startActivity(intent);
+            }
+        });
     }
 }

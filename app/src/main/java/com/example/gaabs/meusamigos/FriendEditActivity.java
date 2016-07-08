@@ -23,10 +23,13 @@ public class FriendEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friends_insert);
+        setContentView(R.layout.friend_edit);
 
-        final EditText nameEditText = (EditText) findViewById(R.id.friend_add_name_editText);
-        final EditText phoneEditText = (EditText) findViewById(R.id.friend_add_phone_editText);
+        //TODO falta atualizar os nomes
+
+        final EditText nameEditText = (EditText) findViewById(R.id.friend_edit_name_editText);
+        nameEditText.setText(getIntent().getExtras().getString("name"));
+        final EditText phoneEditText = (EditText) findViewById(R.id.friend_edit_phone_editText);
 
         Button friendPictureButton = (Button) findViewById(R.id.friend_choose_picture_button);
         friendPictureButton.setOnClickListener(new View.OnClickListener() {
@@ -53,12 +56,12 @@ public class FriendEditActivity extends AppCompatActivity {
         }
         Collections.sort(categoriesList);
 
-        final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_add_category_spinner);
+        final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_edit_category_spinner);
         CategoryListAdapter categoryListAdapter = new CategoryListAdapter(this, categoriesList);
         categoriesSpinner.setAdapter(categoryListAdapter);
 
-        Button friendAddButton = (Button) findViewById(R.id.friend_add_addButton);
-        friendAddButton.setOnClickListener(new View.OnClickListener() {
+        Button friendSaveButton = (Button) findViewById(R.id.friend_edit_saveButton);
+        friendSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name,phone,category,photo;
@@ -74,7 +77,8 @@ public class FriendEditActivity extends AppCompatActivity {
                 friend.setCategory(category);
                 friend.setPhoto(null);
 
-                friendSQLiteHelper.addFriend(friend);
+                //friendSQLiteHelper.editFriend(friend);
+                //TODO nao altera ainda
                 finish();
             }
         });

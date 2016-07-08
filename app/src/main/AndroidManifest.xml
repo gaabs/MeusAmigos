@@ -35,6 +35,9 @@
         <activity android:name=".FriendAddActivity">
         </activity>
 
+        <activity android:name=".FriendEditActivity">
+        </activity>
+
 
     </application>
 

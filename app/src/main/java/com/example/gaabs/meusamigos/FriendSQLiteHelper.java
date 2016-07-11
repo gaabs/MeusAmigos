@@ -180,4 +180,18 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
         Log.d("deleteFriend", friend.toString());
 
     }
+
+    public void clearFriends(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_FRIENDS, "1",null);
+
+        // 3. close
+        db.close();
+
+        //log
+        Log.d("clearFriends", "limpou");
+    }
 }

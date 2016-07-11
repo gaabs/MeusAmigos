@@ -21,11 +21,39 @@
         android:layout_weight="1"/>
     <!--TODO nao entendi porque sem o layout_weight o listview esconde o botao-->
 
-    <Button
-        android:layout_width="@android:dimen/app_icon_size"
-        android:layout_height="@android:dimen/app_icon_size"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/add_icon"
-        android:id="@+id/friend_add_button"
-        android:layout_gravity="center_horizontal" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="10dp"
+            android:text="Importar\ncontatos"
+            android:id="@+id/friend_import_button"
+            android:layout_gravity="start" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="10dp"
+            android:text="Apagar \ntodos contatos"
+            android:id="@+id/friend_clear_button"
+            android:layout_gravity="center" />
+
+        <Button
+            android:layout_width="@android:dimen/app_icon_size"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/add_icon"
+            android:id="@+id/friend_add_button"
+            android:layout_gravity="end" />
+    </FrameLayout>
 </LinearLayout>

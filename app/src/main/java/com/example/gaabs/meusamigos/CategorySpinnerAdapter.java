@@ -7,28 +7,29 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by gaabs on 07/07/16.
  */
 public class CategorySpinnerAdapter extends BaseAdapter {
     Context context;
-    String[] titles;
-    int[] colors;
-    public CategorySpinnerAdapter(Context context, String[] titles, int[] colors){
+    ArrayList<Category> categoriesList;
+
+    public CategorySpinnerAdapter(Context context,ArrayList<Category> categoriesList){
         this.context = context;
-        this.titles = titles;
-        this.colors = colors;
+        this.categoriesList = categoriesList;
     }
 
 
     @Override
     public int getCount() {
-        return titles.length;
+        return categoriesList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return colors[i];
+        return categoriesList.get(i);
     }
 
     @Override
@@ -41,8 +42,10 @@ public class CategorySpinnerAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.spinner_text, null);
         TextView text = (TextView) view.findViewById(R.id.spinner_text);
-        text.setText(titles[i]);
-        text.setTextColor(colors[i]);
+
+        Category category = categoriesList.get(i);
+        text.setText(category.getName());
+        text.setTextColor(category.getColor());
         //text.setBackgroundColor(colors[i]);
 
         return view;

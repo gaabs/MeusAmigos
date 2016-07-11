@@ -109,7 +109,7 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
         ArrayList<Friend> friends = new ArrayList<Friend>();
 
         // 1. build the query
-        String query = "SELECT  * FROM " + TABLE_FRIENDS;
+        String query = "SELECT  * FROM " + TABLE_FRIENDS + " ORDER BY " + KEY_NAME;
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -136,44 +136,48 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
         return friends;
     }
 
-//    public int updateBook(Book book) {
-//
-//        // 1. get reference to writable DB
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        // 2. create ContentValues to add key "column"/value
-//        ContentValues values = new ContentValues();
-//        values.put("title", book.getTitle()); // get title
-//        values.put("author", book.getAuthor()); // get author
-//
-//        // 3. updating row
-//        int i = db.update(TABLE_BOOKS, //table
-//                values, // column/value
-//                KEY_ID+" = ?", // selections
-//                new String[] { String.valueOf(book.getId()) }); //selection args
-//
-//        // 4. close
-//        db.close();
-//
-//        return i;
-//
-//    }
-//
-//    public void deleteBook(Book book) {
-//
-//        // 1. get reference to writable DB
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        // 2. delete
-//        db.delete(TABLE_BOOKS, //table name
-//                KEY_ID+" = ?",  // selections
-//                new String[] { String.valueOf(book.getId()) }); //selections args
-//
-//        // 3. close
-//        db.close();
-//
-//        //log
-//        Log.d("deleteBook", book.toString());
-//
-//    }
+    public int updateFriend(String oldPhone, Friend friend) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, friend.getName());
+        values.put(KEY_PHONE, friend.getPhone());
+        values.put(KEY_CATEGORY, friend.getCategory());
+        values.put(KEY_PHOTO, friend.getPhoto());
+
+        // 3. updating row
+        int i = db.update(TABLE_FRIENDS, //table
+                values, // column/value
+                    KEY_PHONE + " = ?", // c. selections
+                new String[] { oldPhone }  // d. selections args
+        );
+
+        // 4. close
+        db.close();
+
+        return i;
+
+    }
+
+    public void deleteFriend(Friend friend) {
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_FRIENDS, //table name
+                KEY_PHONE + " = ?", // c. selections
+                new String[] { friend.getPhone() }  // d. selections args
+        );
+
+        // 3. close
+        db.close();
+
+        //log
+        Log.d("deleteFriend", friend.toString());
+
+    }
 }

@@ -40,9 +40,6 @@ public class FriendListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences data = getSharedPreferences("friends",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-
         FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(this);
         ArrayList<Friend> friendList = friendSQLiteHelper.getAllFriends();
         FriendListAdapter friendListAdapter = new FriendListAdapter(this, friendList);
@@ -56,6 +53,9 @@ public class FriendListActivity extends AppCompatActivity {
                 Intent intent = new Intent(FriendListActivity.this, FriendEditActivity.class);
 
                 intent.putExtra("name",friend.getName());
+                intent.putExtra("photo",friend.getPhoto());
+                intent.putExtra("phone",friend.getPhone());
+                intent.putExtra("category",friend.getCategory());
 
                 startActivity(intent);
             }

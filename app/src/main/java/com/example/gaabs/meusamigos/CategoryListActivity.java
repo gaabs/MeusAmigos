@@ -55,8 +55,7 @@ public class CategoryListActivity extends AppCompatActivity {
                 Log.i("Category part", String.format("i:%d v:%s",i,categoryData[i]));
             }
 
-            categoriesList.add(new Category(name,color,null));
-
+            categoriesList.add(new Category(name,color,photo));
         }
         Collections.sort(categoriesList);
 

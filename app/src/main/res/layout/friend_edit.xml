@@ -84,7 +84,7 @@
         android:id="@+id/friend_edit_category_textView" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/friend_edit_phone_editText"
         android:layout_marginLeft="20dp"

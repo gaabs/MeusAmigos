@@ -1,15 +1,19 @@
 package com.example.gaabs.meusamigos;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -42,13 +46,25 @@ public class CategoryListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.category_row_layout, null);
-        TextView text = (TextView) view.findViewById(R.id.category_text);
+        TextView name = (TextView) view.findViewById(R.id.category_name_textView);
+        ImageView photo = (ImageView) view.findViewById(R.id.category_photo_imageView);
         Category category = categoriesList.get(i);
-        Log.i("CategoryAdapter", category.toString());
-        text.setText(category.toString());
-        int color = category.getColor();
-        //Uri iconUri = Uri.parse(data[2]);
 
+        //Log.i("CategoryAdapter", category.toString());
+
+        name.setText(category.getName());
+
+        if (category.getPhoto() != null){
+            Uri photoUri = Uri.parse(category.getPhoto());
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), photoUri);
+                photo.setImageBitmap(bitmap);
+            } catch (IOException e){
+                Log.e("FriendListAdapter",e.getMessage());
+            }
+        }
+
+        int color = category.getColor();
         view.setBackgroundColor(color);
 
         return view;

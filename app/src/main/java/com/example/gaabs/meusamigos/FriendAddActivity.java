@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class FriendAddActivity extends AppCompatActivity {
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,8 @@ public class FriendAddActivity extends AppCompatActivity {
         Collections.sort(categoriesList);
 
         final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_add_category_spinner);
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(this, categoriesList);
-        categoriesSpinner.setAdapter(categoryListAdapter);
+        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
+        categoriesSpinner.setAdapter(categorySpinnerAdapter);
 
         Button friendAddButton = (Button) findViewById(R.id.friend_add_addButton);
         friendAddButton.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +81,9 @@ public class FriendAddActivity extends AppCompatActivity {
                 friend.setName(name);
                 friend.setPhone(phone);
                 friend.setCategory(category);
-                friend.setPhoto(null);
+                if (imageUri != null) {
+                    friend.setPhoto(imageUri.toString());
+                }
 
                 friendSQLiteHelper.addFriend(friend);
                 finish();
@@ -93,7 +96,7 @@ public class FriendAddActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 ImageView friendPhoto = (ImageView) findViewById(R.id.friend_photo_imageView);

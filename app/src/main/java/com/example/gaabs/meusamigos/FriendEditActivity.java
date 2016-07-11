@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,19 +20,36 @@ import java.util.Collections;
 import java.util.Map;
 
 public class FriendEditActivity extends AppCompatActivity {
+    String oldPhone;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friend_edit);
 
-        //TODO falta atualizar os nomes
+        oldPhone = getIntent().getExtras().getString("phone");
+        FriendSQLiteHelper sql = new FriendSQLiteHelper(this);
+        Friend friend = sql.getFriend(oldPhone);
+
+        if (friend.getPhoto() != null) {
+            imageUri = Uri.parse(friend.getPhoto());
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                ImageView friendPhoto = (ImageView) findViewById(R.id.friend_photo_imageView);
+                friendPhoto.setImageBitmap(bitmap);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }
 
         final EditText nameEditText = (EditText) findViewById(R.id.friend_edit_name_editText);
-        nameEditText.setText(getIntent().getExtras().getString("name"));
+        nameEditText.setText(friend.getName());
         final EditText phoneEditText = (EditText) findViewById(R.id.friend_edit_phone_editText);
+        phoneEditText.setText(friend.getPhone());
 
         Button friendPictureButton = (Button) findViewById(R.id.friend_choose_picture_button);
+
         friendPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,8 +75,10 @@ public class FriendEditActivity extends AppCompatActivity {
         Collections.sort(categoriesList);
 
         final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_edit_category_spinner);
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(this, categoriesList);
-        categoriesSpinner.setAdapter(categoryListAdapter);
+        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
+        categoriesSpinner.setAdapter(categorySpinnerAdapter);
+
+        categoriesSpinner.setSelection(getIndex(categoriesList,friend.getCategory()));
 
         Button friendSaveButton = (Button) findViewById(R.id.friend_edit_saveButton);
         friendSaveButton.setOnClickListener(new View.OnClickListener() {
@@ -75,10 +95,32 @@ public class FriendEditActivity extends AppCompatActivity {
                 friend.setName(name);
                 friend.setPhone(phone);
                 friend.setCategory(category);
-                friend.setPhoto(null);
+                if (imageUri != null) {
+                    friend.setPhoto(imageUri.toString());
+                }
 
-                //friendSQLiteHelper.editFriend(friend);
+                friendSQLiteHelper.updateFriend(oldPhone,friend);
                 //TODO nao altera ainda
+                Log.i("FriendEdit","editou");
+                finish();
+            }
+        });
+
+        Button friendRemoveButton = (Button) findViewById(R.id.friend_edit_removeButton);
+        friendRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String phone;
+                FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(FriendEditActivity.this);
+
+                phone = (getIntent().getExtras().getString("phone"));
+
+                Friend friend = new Friend();
+                friend.setPhone(phone);
+
+                friendSQLiteHelper.deleteFriend(friend);
+                //TODO nao altera ainda
+                Log.i("FriendEdit","deletou");
                 finish();
             }
         });
@@ -89,7 +131,7 @@ public class FriendEditActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 ImageView friendPhoto = (ImageView) findViewById(R.id.friend_photo_imageView);
@@ -100,4 +142,17 @@ public class FriendEditActivity extends AppCompatActivity {
 
         }
     }
+
+    private int getIndex(ArrayList<Category> categoriesList,String categoryName){
+        int pos = 0;
+
+        for (int i = 0; i < categoriesList.size(); i++){
+            if (categoriesList.get(i).getName().equals(categoryName)){
+                pos = i;
+            }
+        }
+
+        return pos;
+    }
+
 }

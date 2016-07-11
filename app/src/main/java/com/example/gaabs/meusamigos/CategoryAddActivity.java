@@ -33,9 +33,9 @@ public class CategoryAddActivity extends AppCompatActivity {
 
         final Spinner colorSpinner = (Spinner) findViewById(R.id.categories_add_color_spinner);
 
-        String[] colorStrings = {"Azul","Vermelho","Verde"};
+        String[] colorStrings = {"Vermelho","Verde","Azul"};
         ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(colorStrings));
-        final int[] colorInts = {Color.BLUE, Color.RED, Color.GREEN};
+        final int[] colorInts = {Color.rgb(255,102,102), Color.rgb(153,255,153), Color.rgb(153,204,255)};
 
         //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.spinner_text,arrayList);
         ColorSpinnerAdapter spinnerAdapter = new ColorSpinnerAdapter(this,colorStrings,colorInts);

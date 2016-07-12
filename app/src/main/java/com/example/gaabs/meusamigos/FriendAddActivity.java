@@ -75,7 +75,9 @@ public class FriendAddActivity extends AppCompatActivity {
 
                 name = nameEditText.getText().toString();
                 phone = phoneEditText.getText().toString();
-                category = ((Category) categoriesSpinner.getSelectedItem()).getName();
+                category = null;
+                if ((Category) categoriesSpinner.getSelectedItem() != null)
+                    category = ((Category) categoriesSpinner.getSelectedItem()).getName();
 
                 Friend friend = new Friend();
                 friend.setName(name);

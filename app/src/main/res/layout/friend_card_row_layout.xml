@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:padding="16dp">
+
+
+        <ImageView
+            android:id="@+id/friend_photo_imageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:paddingRight="5dp"
+            android:layout_gravity="center"
+            android:src="@drawable/splash_image">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/friend_name_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="nome"
+            android:layout_gravity="center"
+            android:layout_weight="5">
+        </TextView>
+
+        <TextView
+            android:id="@+id/friend_phone_textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="telefone"
+            android:layout_gravity="center"
+            android:layout_weight="5">
+        </TextView>
+
+    </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:minHeight="?android:attr/listPreferredItemHeight"-->
+<!--android:gravity="center_vertical"-->
+<!--android:id="@+id/list_item_forecast_textview"-->
+<!--android:text="Recife 50o"-->
+    <!--&gt;-->
+
+<!--</TextView>-->
+

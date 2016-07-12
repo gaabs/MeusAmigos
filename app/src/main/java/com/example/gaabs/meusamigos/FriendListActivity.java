@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -90,23 +92,26 @@ public class FriendListActivity extends AppCompatActivity {
     private void refreshList(){
         FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(this);
         ArrayList<Friend> friendList = friendSQLiteHelper.getAllFriends();
-        FriendListAdapter friendListAdapter = new FriendListAdapter(this, friendList);
+        FriendListRecycleAdapter friendListAdapter = new FriendListRecycleAdapter(this, friendList);
 
-        ListView friendListView = (ListView) findViewById(R.id.friends_listView);
+        RecyclerView friendListView = (RecyclerView) findViewById(R.id.friends_listView);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        friendListView.setLayoutManager(layoutManager);
+
         friendListView.setAdapter(friendListAdapter);
-        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Friend friend = (Friend) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(FriendListActivity.this, FriendEditActivity.class);
-
-                intent.putExtra("name",friend.getName());
-                intent.putExtra("photo",friend.getPhoto());
-                intent.putExtra("phone",friend.getPhone());
-                intent.putExtra("category",friend.getCategory());
-
-                startActivity(intent);
-            }
-        });
+//        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Friend friend = (Friend) adapterView.getItemAtPosition(i);
+//                Intent intent = new Intent(FriendListActivity.this, FriendEditActivity.class);
+//
+//                intent.putExtra("name",friend.getName());
+//                intent.putExtra("photo",friend.getPhoto());
+//                intent.putExtra("phone",friend.getPhone());
+//                intent.putExtra("category",friend.getCategory());
+//
+//                startActivity(intent);
+//            }
+//        });
     }
 }

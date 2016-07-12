@@ -1,6 +1,7 @@
 package com.example.gaabs.meusamigos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,9 +10,11 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -22,8 +25,8 @@ import java.util.Map;
  * Created by gaabs on 08/07/16.
  */
 public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRecycleAdapter.FriendHolder> {
-    Context context;
-    ArrayList<Friend> friendList;
+    static Context context;
+    static ArrayList<Friend> friendList;
     ArrayList<String> categoriesNames;
     ArrayList<Category> categoriesList;
 
@@ -55,19 +58,36 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
 
     public static class FriendHolder extends RecyclerView.ViewHolder{
         CardView cardView;
+        LinearLayout innerCard;
         ImageView photo;
         TextView name;
+
         TextView phone;
         int color;
 
         public FriendHolder(View view){
             super(view);
             cardView = (CardView) view.findViewById(R.id.cardview);
+            innerCard = (LinearLayout) view.findViewById(R.id.inner_card);
             photo = (ImageView) view.findViewById(R.id.friend_photo_imageView);
             name = (TextView) view.findViewById(R.id.friend_name_textView);
             phone = (TextView) view.findViewById(R.id.friend_phone_textView);
-        }
 
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Friend friend = (Friend) FriendListRecycleAdapter.friendList.get(getAdapterPosition());
+                    Intent intent = new Intent(FriendListRecycleAdapter.context, FriendEditActivity.class);
+
+                    intent.putExtra("name",friend.getName());
+                    intent.putExtra("photo",friend.getPhoto());
+                    intent.putExtra("phone",friend.getPhone());
+                    intent.putExtra("category",friend.getCategory());
+
+                    FriendListRecycleAdapter.context.startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override
@@ -106,8 +126,8 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
         //Uri iconUri = Uri.parse(data[2]);
         //view.setBackgroundColor(color);
 
-        holder.cardView.setBackgroundColor(color);
-//        holder.itemView.setBackgroundColor(color);
+//        holder.cardView.setBackgroundColor(color);
+        holder.innerCard.setBackgroundColor(color);
 
         //return view;
     }
@@ -120,6 +140,10 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
     @Override
     public long getItemId(int i) {
         return 0;
+    }
+
+    public Friend getFriend(int i){
+        return friendList.get(i);
     }
 
 }

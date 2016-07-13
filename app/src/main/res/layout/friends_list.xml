@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/friend_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="5dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/friends"
-        android:id="@+id/friend_textView"
-        android:layout_gravity="center_horizontal" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/friends_listView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:id="@+id/friends_listView"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
     <!--TODO nao entendi porque sem o layout_weight o listview esconde o botao-->
 
     <FrameLayout
@@ -28,32 +28,32 @@
         android:orientation="horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="@android:dimen/app_icon_size"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:textSize="10dp"
-            android:text="Importar\ncontatos"
             android:id="@+id/friend_import_button"
-            android:layout_gravity="start" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="@android:dimen/app_icon_size"
+            android:layout_gravity="start"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
-            android:textSize="10dp"
-            android:text="Apagar \ntodos contatos"
-            android:id="@+id/friend_clear_button"
-            android:layout_gravity="center" />
+            android:text="Importar\ncontatos"
+            android:textSize="10dp" />
 
         <Button
+            android:id="@+id/friend_clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@android:dimen/app_icon_size"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:text="Apagar \ntodos contatos"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/friend_add_button"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="@android:dimen/app_icon_size"
+            android:layout_gravity="end"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/add_icon"
-            android:id="@+id/friend_add_button"
-            android:layout_gravity="end" />
+            android:background="@drawable/add_icon" />
     </FrameLayout>
 </LinearLayout>

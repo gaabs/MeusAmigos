@@ -1,5 +1,6 @@
 package com.example.gaabs.meusamigos;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import java.util.TreeSet;
 
 public class FriendListActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,12 @@ public class FriendListActivity extends AppCompatActivity {
         importButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,null,null, null,null);
+
+                ProgressDialog progressDialog = new ProgressDialog(FriendListActivity.this);
+                progressDialog.setMessage("Importando...");
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+                Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
                 String name, phone, photo;
                 Friend friend;
                 FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(FriendListActivity.this);
@@ -44,7 +51,7 @@ public class FriendListActivity extends AppCompatActivity {
 //                    listContactId.add(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)));
                     if (Integer.parseInt(cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                         Cursor pCur = getContentResolver().query(
-                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)),null, null);
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID)), null, null);
                         pCur.moveToNext();
                         phone = pCur.getString(pCur.getColumnIndex("DATA1"));
                         pCur.close();
@@ -59,7 +66,9 @@ public class FriendListActivity extends AppCompatActivity {
                     friend.setPhoto(photo);
                     friendSQLiteHelper.addFriend(friend);
                 }
+                cursor.close();
                 refreshList();
+                progressDialog.cancel();
             }
         });
 
@@ -90,7 +99,7 @@ public class FriendListActivity extends AppCompatActivity {
         refreshList();
     }
 
-    private void refreshList(){
+    private void refreshList() {
         FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(this);
         ArrayList<Friend> friendList = friendSQLiteHelper.getAllFriends();
         FriendListRecycleAdapter friendListAdapter = new FriendListRecycleAdapter(this, friendList);
@@ -108,7 +117,7 @@ public class FriendListActivity extends AppCompatActivity {
 
             @Override
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                Log.i("FriendListOnTouch","tocou");
+                Log.i("FriendListOnTouch", "tocou");
 
             }
 

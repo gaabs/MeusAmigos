@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="categoriesNames">
+        <item>Vermelho</item>
+        <item>Verde</item>
+        <item>Azul</item>
+    </array>
+
+    <array name="categoriesColors">
+        <item>@color/lightRed</item>
+        <item>@color/lightGreen</item>
+        <item>@color/lightBlue</item>
+    </array>
+
+</resources>

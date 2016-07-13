@@ -2,8 +2,8 @@ package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -14,13 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.gaabs.meusamigos.adapters.ColorSpinnerAdapter;
 import com.example.gaabs.meusamigos.R;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 public class CategoryAddActivity extends AppCompatActivity {
@@ -28,12 +27,15 @@ public class CategoryAddActivity extends AppCompatActivity {
     EditText categoryEditText;
     Spinner colorSpinner;
     ColorSpinnerAdapter spinnerAdapter;
-    SharedPreferences categoresPreferences;
+    SharedPreferences categoriesPreferences;
     SharedPreferences.Editor editor;
     Map<String, ? > categoriesMap;
     Button categoryPictureButton;
     Button categoryAddButton;
     ImageView categoryIcon;
+    Resources resources;
+    String[] colorStrings;
+    int[] colorInts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +45,16 @@ public class CategoryAddActivity extends AppCompatActivity {
         categoryEditText = (EditText) findViewById(R.id.categories_add_name_editText);
         colorSpinner = (Spinner) findViewById(R.id.categories_add_color_spinner);
 
-        String[] colorStrings = {"Vermelho","Verde","Azul"};
-        ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(colorStrings));
-        final int[] colorInts = {Color.rgb(255,102,102), Color.rgb(153,255,153), Color.rgb(153,204,255)};
+        resources = getResources();
+        colorStrings = resources.getStringArray(R.array.categoriesNames);
+        colorInts = resources.getIntArray(R.array.categoriesColors);
 
         spinnerAdapter = new ColorSpinnerAdapter(this,colorStrings,colorInts);
         colorSpinner.setAdapter(spinnerAdapter);
 
-        categoresPreferences = getSharedPreferences("categories",MODE_PRIVATE);
-        editor = categoresPreferences.edit();
-        categoriesMap = categoresPreferences.getAll();
+        categoriesPreferences = getSharedPreferences("categories",MODE_PRIVATE);
+        editor = categoriesPreferences.edit();
+        categoriesMap = categoriesPreferences.getAll();
         Log.i("categoriesAdd", "categories: " + categoriesMap.toString());
 
         categoryPictureButton = (Button) findViewById(R.id.category_choose_picture_button);
@@ -85,6 +87,7 @@ public class CategoryAddActivity extends AppCompatActivity {
                     editor.commit();
                     finish();
                 } else{
+                    Toast.makeText(CategoryAddActivity.this, "Ja existe categoria com esse nome!", Toast.LENGTH_SHORT).show();
                     Log.i("categoryCreateOnClick","Nao criou categoria (repetida)");
                 }
             }

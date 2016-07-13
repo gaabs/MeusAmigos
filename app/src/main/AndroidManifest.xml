@@ -12,7 +12,7 @@
 
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/AppTheme.Splash">
 
             <intent-filter>
@@ -22,22 +22,22 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
         </activity>
 
-        <activity android:name=".CategoryListActivity">
+        <activity android:name=".activities.CategoryListActivity">
         </activity>
 
-        <activity android:name=".CategoryAddActivity">
+        <activity android:name=".activities.CategoryAddActivity">
         </activity>
 
-        <activity android:name=".FriendListActivity">
+        <activity android:name=".activities.FriendListActivity">
         </activity>
 
-        <activity android:name=".FriendAddActivity">
+        <activity android:name=".activities.FriendAddActivity">
         </activity>
 
-        <activity android:name=".FriendEditActivity">
+        <activity android:name=".activities.FriendEditActivity">
         </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

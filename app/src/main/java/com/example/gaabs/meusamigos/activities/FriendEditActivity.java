@@ -1,4 +1,4 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+
+import com.example.gaabs.meusamigos.adapters.CategorySpinnerAdapter;
+import com.example.gaabs.meusamigos.database.FriendSQLiteHelper;
+import com.example.gaabs.meusamigos.R;
+import com.example.gaabs.meusamigos.entities.Category;
+import com.example.gaabs.meusamigos.entities.Friend;
 
 import java.io.IOException;
 import java.util.ArrayList;

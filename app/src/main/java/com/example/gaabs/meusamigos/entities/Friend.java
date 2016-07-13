@@ -1,4 +1,4 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.entities;
 
 /**
  * Created by gaabs on 08/07/16.

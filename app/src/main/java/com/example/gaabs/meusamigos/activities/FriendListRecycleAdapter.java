@@ -1,4 +1,4 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +10,15 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.gaabs.meusamigos.R;
+import com.example.gaabs.meusamigos.entities.Category;
+import com.example.gaabs.meusamigos.entities.Friend;
 
 import java.io.IOException;
 import java.util.ArrayList;

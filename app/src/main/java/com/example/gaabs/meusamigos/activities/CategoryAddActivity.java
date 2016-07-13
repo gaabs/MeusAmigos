@@ -1,4 +1,4 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,39 +15,47 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.example.gaabs.meusamigos.adapters.ColorSpinnerAdapter;
+import com.example.gaabs.meusamigos.R;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
 public class CategoryAddActivity extends AppCompatActivity {
-
-    private Uri categoryImageUri = null;
+    Uri categoryImageUri;
+    EditText categoryEditText;
+    Spinner colorSpinner;
+    ColorSpinnerAdapter spinnerAdapter;
+    SharedPreferences categoresPreferences;
+    SharedPreferences.Editor editor;
+    Map<String, ? > categoriesMap;
+    Button categoryPictureButton;
+    Button categoryAddButton;
+    ImageView categoryIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.categories_insert);
 
-        final EditText categoryEditText = (EditText) findViewById(R.id.categories_add_name_editText);
-
-        final Spinner colorSpinner = (Spinner) findViewById(R.id.categories_add_color_spinner);
+        categoryEditText = (EditText) findViewById(R.id.categories_add_name_editText);
+        colorSpinner = (Spinner) findViewById(R.id.categories_add_color_spinner);
 
         String[] colorStrings = {"Vermelho","Verde","Azul"};
         ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(colorStrings));
         final int[] colorInts = {Color.rgb(255,102,102), Color.rgb(153,255,153), Color.rgb(153,204,255)};
 
-        //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.spinner_text,arrayList);
-        ColorSpinnerAdapter spinnerAdapter = new ColorSpinnerAdapter(this,colorStrings,colorInts);
+        spinnerAdapter = new ColorSpinnerAdapter(this,colorStrings,colorInts);
         colorSpinner.setAdapter(spinnerAdapter);
 
-        SharedPreferences categoresPreferences = getSharedPreferences("categories",MODE_PRIVATE);
-        final SharedPreferences.Editor editor = categoresPreferences.edit();
-        final Map<String, ? > categoriesMap = categoresPreferences.getAll();
+        categoresPreferences = getSharedPreferences("categories",MODE_PRIVATE);
+        editor = categoresPreferences.edit();
+        categoriesMap = categoresPreferences.getAll();
         Log.i("categoriesAdd", "categories: " + categoriesMap.toString());
 
-
-        Button categoryPictureButton = (Button) findViewById(R.id.category_choose_picture_button);
+        categoryPictureButton = (Button) findViewById(R.id.category_choose_picture_button);
         categoryPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +67,7 @@ public class CategoryAddActivity extends AppCompatActivity {
 
         });
 
-        Button categoryAddButton = (Button) findViewById(R.id.category_add_button);
+        categoryAddButton = (Button) findViewById(R.id.category_add_button);
         categoryAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,13 +87,10 @@ public class CategoryAddActivity extends AppCompatActivity {
                 } else{
                     Log.i("categoryCreateOnClick","Nao criou categoria (repetida)");
                 }
-
             }
 
 
         });
-
-
     }
 
     @Override
@@ -93,12 +98,12 @@ public class CategoryAddActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("onActivityResult","Entrou");
         if (resultCode == RESULT_OK){
-            ImageView categoryIcon = (ImageView) findViewById(R.id.category_icon_imageView);
+            categoryIcon = (ImageView) findViewById(R.id.category_icon_imageView);
             Uri imageUri = data.getData();
-            categoryImageUri = imageUri;
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),imageUri);
                 categoryIcon.setImageBitmap(bitmap);
+                categoryImageUri = imageUri;
                 Log.i("onActivityResult","Escolheu imagem!");
 
             } catch (IOException e) {

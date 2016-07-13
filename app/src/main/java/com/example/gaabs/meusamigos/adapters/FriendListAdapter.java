@@ -1,4 +1,4 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.gaabs.meusamigos.R;
+import com.example.gaabs.meusamigos.entities.Category;
+import com.example.gaabs.meusamigos.entities.Friend;
 
 import java.io.IOException;
 import java.util.ArrayList;

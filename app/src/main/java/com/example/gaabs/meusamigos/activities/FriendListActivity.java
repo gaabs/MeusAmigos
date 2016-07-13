@@ -1,9 +1,7 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -13,17 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+
+import com.example.gaabs.meusamigos.database.FriendSQLiteHelper;
+import com.example.gaabs.meusamigos.R;
+import com.example.gaabs.meusamigos.entities.Friend;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class FriendListActivity extends AppCompatActivity {
 

@@ -1,16 +1,15 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.example.gaabs.meusamigos.entities.Friend;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by gaabs on 08/07/16.

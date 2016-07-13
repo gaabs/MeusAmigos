@@ -1,4 +1,4 @@
-package com.example.gaabs.meusamigos;
+package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,15 +6,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.example.gaabs.meusamigos.adapters.CategoryListAdapter;
+import com.example.gaabs.meusamigos.R;
+import com.example.gaabs.meusamigos.entities.Category;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class CategoryListActivity extends AppCompatActivity {

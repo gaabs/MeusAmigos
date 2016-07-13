@@ -25,7 +25,7 @@ public class FriendListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friends_list);
+        setContentView(R.layout.activity_friends_list);
 
         Button importButton = (Button) findViewById(R.id.friend_import_button);
         importButton.setOnClickListener(new View.OnClickListener() {

@@ -18,13 +18,19 @@ import java.util.Collections;
 import java.util.Map;
 
 public class CategoryListActivity extends AppCompatActivity {
+    ListView categoryListView;
+    SharedPreferences categoriesPreferences;
+    Map<String, String> categoriesMap;
+    ArrayList<Category> categoriesList;
+    CategoryListAdapter categoriesAdapter;
+    Button addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.categories_list);
+        setContentView(R.layout.activity_categories_list);
 
-        Button addButton = (Button) findViewById(R.id.categories_add_button);
+        addButton = (Button) findViewById(R.id.categories_add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,31 +43,27 @@ public class CategoryListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        ListView categoryListView = (ListView) findViewById(R.id.categories_listView);
+        categoryListView = (ListView) findViewById(R.id.categories_listView);
 
-        SharedPreferences categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
-        Map<String,String> categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
+        categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
+        categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
 
-        ArrayList<Category> categoriesList = new ArrayList<>();
+        categoriesList = new ArrayList<>();
+        String categoryData[];
+        String name,photo;
+        int color;
         for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            String categoryData[] = category.getValue().split(",",-1);
-            String name,photo;
-            int color;
+            categoryData = category.getValue().split(",",-1);
             name = categoryData[0];
             color = Integer.parseInt(categoryData[1]);
             photo = categoryData[2];
-
-            for(int i = 0; i < categoryData.length; i++) {
-                Log.i("Category part", String.format("i:%d v:%s",i,categoryData[i]));
-            }
 
             categoriesList.add(new Category(name,color,photo));
         }
         Collections.sort(categoriesList);
 
         Log.i("categoriesList", "categories: " + categoriesList.toString());
-        //ArrayAdapter categoriesAdapter = new ArrayAdapter(this, R.layout.category_row_layout, categoriesList);
-        CategoryListAdapter categoriesAdapter = new CategoryListAdapter(this, categoriesList);
+        categoriesAdapter = new CategoryListAdapter(this, categoriesList);
         categoryListView.setAdapter(categoriesAdapter);
     }
 }

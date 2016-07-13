@@ -26,16 +26,25 @@ import java.util.Map;
 
 public class FriendAddActivity extends AppCompatActivity {
     Uri imageUri;
+    EditText nameEditText;
+    EditText phoneEditText;
+    Button friendPictureButton;
+    SharedPreferences categoriesPreferences;
+    Map<String, String> categoriesMap;
+    ArrayList<Category> categoriesList;
+    Spinner categoriesSpinner;
+    CategorySpinnerAdapter categorySpinnerAdapter;
+    Button friendAddButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.friends_insert);
+        setContentView(R.layout.activity_friends_insert);
 
-        final EditText nameEditText = (EditText) findViewById(R.id.friend_add_name_editText);
-        final EditText phoneEditText = (EditText) findViewById(R.id.friend_add_phone_editText);
+        nameEditText = (EditText) findViewById(R.id.friend_add_name_editText);
+        phoneEditText = (EditText) findViewById(R.id.friend_add_phone_editText);
 
-        Button friendPictureButton = (Button) findViewById(R.id.friend_choose_picture_button);
+        friendPictureButton = (Button) findViewById(R.id.friend_choose_picture_button);
         friendPictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,14 +53,16 @@ public class FriendAddActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
-        Map<String,String> categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
+        categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
+        categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
 
-        ArrayList<Category> categoriesList = new ArrayList<>();
+        categoriesList = new ArrayList<>();
+        String categoryData[];
+        String name,photo;
+        int color;
+        // TODO refatorar for (repetido em CategoryListActivity)
         for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            String categoryData[] = category.getValue().split(",",-1);
-            String name,photo;
-            int color;
+            categoryData = category.getValue().split(",",-1);
             name = categoryData[0];
             color = Integer.parseInt(categoryData[1]);
             photo = categoryData[2];
@@ -60,11 +71,11 @@ public class FriendAddActivity extends AppCompatActivity {
         }
         Collections.sort(categoriesList);
 
-        final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_add_category_spinner);
-        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
+        categoriesSpinner = (Spinner) findViewById(R.id.friend_add_category_spinner);
+        categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
         categoriesSpinner.setAdapter(categorySpinnerAdapter);
 
-        Button friendAddButton = (Button) findViewById(R.id.friend_add_addButton);
+        friendAddButton = (Button) findViewById(R.id.friend_add_addButton);
         friendAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +85,7 @@ public class FriendAddActivity extends AppCompatActivity {
                 name = nameEditText.getText().toString();
                 phone = phoneEditText.getText().toString();
                 category = null;
-                if ((Category) categoriesSpinner.getSelectedItem() != null)
+                if (categoriesSpinner.getSelectedItem() != null)
                     category = ((Category) categoriesSpinner.getSelectedItem()).getName();
 
                 Friend friend = new Friend();

@@ -40,7 +40,7 @@ public class CategoryAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.categories_insert);
+        setContentView(R.layout.activity_categories_insert);
 
         categoryEditText = (EditText) findViewById(R.id.categories_add_name_editText);
         colorSpinner = (Spinner) findViewById(R.id.categories_add_color_spinner);

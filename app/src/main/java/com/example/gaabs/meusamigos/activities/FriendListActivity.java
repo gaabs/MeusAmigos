@@ -28,7 +28,7 @@ public class FriendListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends_list);
+        setContentView(R.layout.activity_friend_list);
 
         dbManager = new SQLiteManager(FriendListActivity.this);
         friendController = new FriendController(dbManager);

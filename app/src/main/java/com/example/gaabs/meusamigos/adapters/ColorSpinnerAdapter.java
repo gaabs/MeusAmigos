@@ -47,8 +47,8 @@ public class ColorSpinnerAdapter extends BaseAdapter {
         view = inflater.inflate(R.layout.spinner_text, null);
         TextView text = (TextView) view.findViewById(R.id.spinner_text);
         text.setText(titles[i]);
-        text.setTextColor(colors[i]);
-        //text.setBackgroundColor(colors[i]);
+//        text.setTextColor(colors[i]);
+        text.setBackgroundColor(colors[i]);
 
         return view;
     }

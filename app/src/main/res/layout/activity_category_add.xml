@@ -46,12 +46,13 @@
 
     <Spinner
         android:id="@+id/categories_add_color_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@id/categories_add_name_editText"
         android:layout_below="@id/categories_add_name_editText"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/categories_add_color_textView" />
+        android:layout_toEndOf="@id/categories_add_color_textView"
+        />
 
 
     <ImageView

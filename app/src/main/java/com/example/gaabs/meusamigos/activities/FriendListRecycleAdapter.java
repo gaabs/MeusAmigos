@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.gaabs.meusamigos.R;
 import com.example.gaabs.meusamigos.entities.Category;
 import com.example.gaabs.meusamigos.entities.Friend;
+import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,25 +38,10 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
         this.context = context;
         this.friendList = friendList;
 
-        SharedPreferences categoriesPreferences = context.getSharedPreferences("categories", Context.MODE_PRIVATE);
-        Map<String,String> categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
-
-        categoriesList = new ArrayList<>();
+        categoriesList = CategoriesManager.getCategories(context);
         categoriesNames = new ArrayList<>();
-        for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            String categoryData[] = category.getValue().split(",",-1);
-            String name,photo;
-            int color;
-            name = categoryData[0];
-            color = Integer.parseInt(categoryData[1]);
-            photo = categoryData[2];
-
-            for(int i = 0; i < categoryData.length; i++) {
-                Log.i("Category part", String.format("i:%d v:%s",i,categoryData[i]));
-            }
-
-            categoriesList.add(new Category(name,color,photo));
-            categoriesNames.add(name);
+        for(Category category : categoriesList){
+            categoriesNames.add(category.getName());
         }
     }
 
@@ -64,9 +50,7 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
         LinearLayout innerCard;
         ImageView photo;
         TextView name;
-
         TextView phone;
-        int color;
 
         public FriendHolder(View view){
             super(view);
@@ -79,7 +63,7 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Friend friend = (Friend) FriendListRecycleAdapter.friendList.get(getAdapterPosition());
+                    Friend friend = FriendListRecycleAdapter.friendList.get(getAdapterPosition());
                     Intent intent = new Intent(FriendListRecycleAdapter.context, FriendEditActivity.class);
 
                     intent.putExtra("name",friend.getName());
@@ -95,7 +79,7 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
 
     @Override
     public FriendHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_card_row_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend_card, parent, false);
         FriendHolder friendHolder = new FriendHolder(view);
         return friendHolder;
     }
@@ -115,9 +99,6 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
         holder.name.setText(friend.getName());
         holder.phone.setText(friend.getPhone());
 
-        //view.setBackgroundColor(friend.c);
-
-
         int color = 0;
         if (categoriesNames.contains(friend.getCategory()) ) {
             int pos = categoriesNames.indexOf(friend.getCategory());
@@ -125,14 +106,8 @@ public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRec
             color = category.getColor();
             Log.i("FriendListAdapter","color: " + color);
         }
-
-        //Uri iconUri = Uri.parse(data[2]);
-        //view.setBackgroundColor(color);
-
-//        holder.cardView.setBackgroundColor(color);
         holder.innerCard.setBackgroundColor(color);
 
-        //return view;
     }
 
     @Override

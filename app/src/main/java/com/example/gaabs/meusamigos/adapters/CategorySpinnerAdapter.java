@@ -24,7 +24,6 @@ public class CategorySpinnerAdapter extends BaseAdapter {
         this.categoriesList = categoriesList;
     }
 
-
     @Override
     public int getCount() {
         return categoriesList.size();
@@ -48,8 +47,7 @@ public class CategorySpinnerAdapter extends BaseAdapter {
 
         Category category = categoriesList.get(i);
         text.setText(category.getName());
-        text.setTextColor(category.getColor());
-        //text.setBackgroundColor(colors[i]);
+        text.setBackgroundColor(category.getColor());
 
         return view;
     }

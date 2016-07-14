@@ -1,7 +1,6 @@
 package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,8 +14,6 @@ import com.example.gaabs.meusamigos.entities.Category;
 import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 
 public class CategoryListActivity extends AppCompatActivity {
     ListView categoryListView;
@@ -27,7 +24,7 @@ public class CategoryListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categories_list);
+        setContentView(R.layout.activity_category_list);
 
         addButton = (Button) findViewById(R.id.categories_add_button);
         addButton.setOnClickListener(new View.OnClickListener() {

@@ -15,7 +15,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_layout);
+        setContentView(R.layout.activity_splash);
 
         AsyncTaskLoader taskLoader = new AsyncTaskLoader(this) {
             @Override

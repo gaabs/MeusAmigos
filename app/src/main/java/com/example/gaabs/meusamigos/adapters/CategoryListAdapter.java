@@ -47,7 +47,7 @@ public class CategoryListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.category_row_layout, null);
+        view = inflater.inflate(R.layout.item_category, null);
         TextView name = (TextView) view.findViewById(R.id.category_name_textView);
         ImageView photo = (ImageView) view.findViewById(R.id.category_photo_imageView);
         Category category = categoriesList.get(i);

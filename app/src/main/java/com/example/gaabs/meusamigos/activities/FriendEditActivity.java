@@ -79,8 +79,7 @@ public class FriendEditActivity extends AppCompatActivity {
         friendSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name,phone,category,photo;
-                SQLiteManager SQLiteManager = new SQLiteManager(FriendEditActivity.this);
+                String name,phone,category;
 
                 name = nameEditText.getText().toString();
                 phone = phoneEditText.getText().toString();
@@ -105,7 +104,6 @@ public class FriendEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String phone;
-                SQLiteManager SQLiteManager = new SQLiteManager(FriendEditActivity.this);
 
                 phone = (getIntent().getExtras().getString("phone"));
 

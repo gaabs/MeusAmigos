@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.example.gaabs.meusamigos.adapters.CategoryListAdapter;
 import com.example.gaabs.meusamigos.R;
 import com.example.gaabs.meusamigos.entities.Category;
+import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,8 +20,6 @@ import java.util.Map;
 
 public class CategoryListActivity extends AppCompatActivity {
     ListView categoryListView;
-    SharedPreferences categoriesPreferences;
-    Map<String, String> categoriesMap;
     ArrayList<Category> categoriesList;
     CategoryListAdapter categoriesAdapter;
     Button addButton;
@@ -45,23 +44,7 @@ public class CategoryListActivity extends AppCompatActivity {
         super.onStart();
         categoryListView = (ListView) findViewById(R.id.categories_listView);
 
-        categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
-        categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
-
-        categoriesList = new ArrayList<>();
-        String categoryData[];
-        String name,photo;
-        int color;
-        for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            categoryData = category.getValue().split(",",-1);
-            name = categoryData[0];
-            color = Integer.parseInt(categoryData[1]);
-            photo = categoryData[2];
-
-            categoriesList.add(new Category(name,color,photo));
-        }
-        Collections.sort(categoriesList);
-
+        categoriesList = CategoriesManager.getCategories(this);
         Log.i("categoriesList", "categories: " + categoriesList.toString());
         categoriesAdapter = new CategoryListAdapter(this, categoriesList);
         categoryListView.setAdapter(categoriesAdapter);

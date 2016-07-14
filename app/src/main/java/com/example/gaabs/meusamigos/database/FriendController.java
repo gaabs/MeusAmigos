@@ -14,37 +14,11 @@ import java.util.ArrayList;
 /**
  * Created by gaabs on 08/07/16.
  */
-public class FriendSQLiteHelper extends SQLiteOpenHelper{
+public class FriendController{
+    private SQLiteManager dbManager;
 
-    public static final String DATABASE_NAME = "mydb";
-    public static final int DATABASE_VERSION = 1;
-
-    public static final String TABLE_FRIENDS = "friends";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_PHONE = "phone";
-    public static final String KEY_CATEGORY = "category";
-    public static final String KEY_PHOTO = "photo";
-    public static final String[] COLUMNS = {KEY_NAME, KEY_PHONE, KEY_CATEGORY, KEY_PHOTO};
-
-
-    public FriendSQLiteHelper(Context context){
-        super(context,DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String CREATE_FRIEND_TABLE = "CREATE TABLE " + TABLE_FRIENDS + " (" +
-                KEY_NAME + " STRING, " +
-                KEY_PHONE + " STRING PRIMARY KEY, " +
-                KEY_CATEGORY + " STRING, " +
-                KEY_PHOTO + " STRING )";
-        sqLiteDatabase.execSQL(CREATE_FRIEND_TABLE);
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FRIENDS);
-        onCreate(sqLiteDatabase);
+    public FriendController(SQLiteManager dbManager){
+        this.dbManager = dbManager;
     }
 
     public void addFriend(Friend friend){
@@ -52,17 +26,17 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
         Log.d("addFriend", friend.toString());
 
         // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, friend.getName());
-        values.put(KEY_PHONE, friend.getPhone());
-        values.put(KEY_CATEGORY, friend.getCategory());
-        values.put(KEY_PHOTO, friend.getPhoto());
+        values.put(dbManager.FRIENDS_NAME, friend.getName());
+        values.put(dbManager.FRIENDS_PHONE, friend.getPhone());
+        values.put(dbManager.FRIENDS_CATEGORY, friend.getCategory());
+        values.put(dbManager.FRIENDS_PHOTO, friend.getPhoto());
 
         // 3. insert
-        db.insert(TABLE_FRIENDS, // table
+        db.insert(dbManager.TABLE_FRIENDS, // table
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/ values = column values
 
@@ -73,13 +47,13 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
     public Friend getFriend(String phone){
 
         // 1. get reference to readable DB
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = dbManager.getReadableDatabase();
 
         // 2. build query
         Cursor cursor =
-                db.query(TABLE_FRIENDS, // a. table
-                        COLUMNS, // b. column names
-                        KEY_PHONE + " = ?", // c. selections
+                db.query(dbManager.TABLE_FRIENDS, // a. table
+                        dbManager.FRIENDS_COLUMNS, // b. column names
+                        dbManager.FRIENDS_PHONE + " = ?", // c. selections
                         new String[] { phone }, // d. selections args
                         null, // e. group by
                         null, // f. having
@@ -108,10 +82,10 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
         ArrayList<Friend> friends = new ArrayList<Friend>();
 
         // 1. build the query
-        String query = "SELECT  * FROM " + TABLE_FRIENDS + " ORDER BY " + KEY_NAME;
+        String query = "SELECT  * FROM " + dbManager.TABLE_FRIENDS + " ORDER BY " + dbManager.FRIENDS_NAME;
 
         // 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build friend and add it to list
@@ -138,19 +112,19 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
     public int updateFriend(String oldPhone, Friend friend) {
 
         // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, friend.getName());
-        values.put(KEY_PHONE, friend.getPhone());
-        values.put(KEY_CATEGORY, friend.getCategory());
-        values.put(KEY_PHOTO, friend.getPhoto());
+        values.put(dbManager.FRIENDS_NAME, friend.getName());
+        values.put(dbManager.FRIENDS_PHONE, friend.getPhone());
+        values.put(dbManager.FRIENDS_CATEGORY, friend.getCategory());
+        values.put(dbManager.FRIENDS_PHOTO, friend.getPhoto());
 
         // 3. updating row
-        int i = db.update(TABLE_FRIENDS, //table
+        int i = db.update(dbManager.TABLE_FRIENDS, //table
                 values, // column/value
-                    KEY_PHONE + " = ?", // c. selections
+                dbManager.FRIENDS_PHONE + " = ?", // c. selections
                 new String[] { oldPhone }  // d. selections args
         );
 
@@ -164,11 +138,11 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
     public void deleteFriend(Friend friend) {
 
         // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         // 2. delete
-        db.delete(TABLE_FRIENDS, //table name
-                KEY_PHONE + " = ?", // c. selections
+        db.delete(dbManager.TABLE_FRIENDS, //table name
+                dbManager.FRIENDS_PHONE + " = ?", // c. selections
                 new String[] { friend.getPhone() }  // d. selections args
         );
 
@@ -182,10 +156,10 @@ public class FriendSQLiteHelper extends SQLiteOpenHelper{
 
     public void clearFriends(){
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
         // 2. delete
-        db.delete(TABLE_FRIENDS, "1",null);
+        db.delete(dbManager.TABLE_FRIENDS, "1",null);
 
         // 3. close
         db.close();

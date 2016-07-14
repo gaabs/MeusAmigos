@@ -1,7 +1,6 @@
 package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,19 +14,21 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.gaabs.meusamigos.adapters.CategorySpinnerAdapter;
-import com.example.gaabs.meusamigos.database.FriendSQLiteHelper;
+import com.example.gaabs.meusamigos.database.FriendController;
+import com.example.gaabs.meusamigos.database.SQLiteManager;
 import com.example.gaabs.meusamigos.R;
 import com.example.gaabs.meusamigos.entities.Category;
 import com.example.gaabs.meusamigos.entities.Friend;
+import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 
 public class FriendEditActivity extends AppCompatActivity {
     String oldPhone;
     Uri imageUri;
+    SQLiteManager dbManager;
+    FriendController friendController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,10 @@ public class FriendEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friend_edit);
 
         oldPhone = getIntent().getExtras().getString("phone");
-        FriendSQLiteHelper sql = new FriendSQLiteHelper(this);
-        Friend friend = sql.getFriend(oldPhone);
+        dbManager = new SQLiteManager(this);
+        friendController = new FriendController(dbManager);
+
+        Friend friend = friendController.getFriend(oldPhone);
 
         if (friend.getPhoto() != null) {
             imageUri = Uri.parse(friend.getPhoto());
@@ -64,21 +67,7 @@ public class FriendEditActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
-        Map<String,String> categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
-
-        ArrayList<Category> categoriesList = new ArrayList<>();
-        for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            String categoryData[] = category.getValue().split(",",-1);
-            String name,photo;
-            int color;
-            name = categoryData[0];
-            color = Integer.parseInt(categoryData[1]);
-            photo = categoryData[2];
-
-            categoriesList.add(new Category(name,color,photo));
-        }
-        Collections.sort(categoriesList);
+        ArrayList<Category> categoriesList = CategoriesManager.getCategories(this);
 
         final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_edit_category_spinner);
         CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
@@ -91,7 +80,7 @@ public class FriendEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String name,phone,category,photo;
-                FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(FriendEditActivity.this);
+                SQLiteManager SQLiteManager = new SQLiteManager(FriendEditActivity.this);
 
                 name = nameEditText.getText().toString();
                 phone = phoneEditText.getText().toString();
@@ -105,8 +94,7 @@ public class FriendEditActivity extends AppCompatActivity {
                     friend.setPhoto(imageUri.toString());
                 }
 
-                friendSQLiteHelper.updateFriend(oldPhone,friend);
-                //TODO nao altera ainda
+                friendController.updateFriend(oldPhone,friend);
                 Log.i("FriendEdit","editou");
                 finish();
             }
@@ -117,15 +105,14 @@ public class FriendEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String phone;
-                FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(FriendEditActivity.this);
+                SQLiteManager SQLiteManager = new SQLiteManager(FriendEditActivity.this);
 
                 phone = (getIntent().getExtras().getString("phone"));
 
                 Friend friend = new Friend();
                 friend.setPhone(phone);
 
-                friendSQLiteHelper.deleteFriend(friend);
-                //TODO nao altera ainda
+                friendController.deleteFriend(friend);
                 Log.i("FriendEdit","deletou");
                 finish();
             }
@@ -149,7 +136,7 @@ public class FriendEditActivity extends AppCompatActivity {
         }
     }
 
-    private int getIndex(ArrayList<Category> categoriesList,String categoryName){
+    private int getIndex(ArrayList<Category> categoriesList, String categoryName){
         int pos = 0;
 
         for (int i = 0; i < categoriesList.size(); i++){

@@ -1,7 +1,6 @@
 package com.example.gaabs.meusamigos.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,27 +13,27 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.gaabs.meusamigos.adapters.CategorySpinnerAdapter;
-import com.example.gaabs.meusamigos.database.FriendSQLiteHelper;
+import com.example.gaabs.meusamigos.database.FriendController;
+import com.example.gaabs.meusamigos.database.SQLiteManager;
 import com.example.gaabs.meusamigos.R;
 import com.example.gaabs.meusamigos.entities.Category;
 import com.example.gaabs.meusamigos.entities.Friend;
+import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
 
 public class FriendAddActivity extends AppCompatActivity {
     Uri imageUri;
     EditText nameEditText;
     EditText phoneEditText;
     Button friendPictureButton;
-    SharedPreferences categoriesPreferences;
-    Map<String, String> categoriesMap;
     ArrayList<Category> categoriesList;
     Spinner categoriesSpinner;
     CategorySpinnerAdapter categorySpinnerAdapter;
     Button friendAddButton;
+    SQLiteManager dbManager;
+    FriendController friendController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,34 +52,19 @@ public class FriendAddActivity extends AppCompatActivity {
             }
         });
 
-        categoriesPreferences = getSharedPreferences("categories", MODE_PRIVATE);
-        categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
-
-        categoriesList = new ArrayList<>();
-        String categoryData[];
-        String name,photo;
-        int color;
-        // TODO refatorar for (repetido em CategoryListActivity)
-        for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            categoryData = category.getValue().split(",",-1);
-            name = categoryData[0];
-            color = Integer.parseInt(categoryData[1]);
-            photo = categoryData[2];
-
-            categoriesList.add(new Category(name,color,photo));
-        }
-        Collections.sort(categoriesList);
-
+        categoriesList = CategoriesManager.getCategories(this);
         categoriesSpinner = (Spinner) findViewById(R.id.friend_add_category_spinner);
         categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
         categoriesSpinner.setAdapter(categorySpinnerAdapter);
+
+        dbManager = new SQLiteManager(this);
+        friendController = new FriendController(dbManager);
 
         friendAddButton = (Button) findViewById(R.id.friend_add_addButton);
         friendAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name,phone,category,photo;
-                FriendSQLiteHelper friendSQLiteHelper = new FriendSQLiteHelper(FriendAddActivity.this);
 
                 name = nameEditText.getText().toString();
                 phone = phoneEditText.getText().toString();
@@ -96,7 +80,7 @@ public class FriendAddActivity extends AppCompatActivity {
                     friend.setPhoto(imageUri.toString());
                 }
 
-                friendSQLiteHelper.addFriend(friend);
+                friendController.addFriend(friend);
                 finish();
             }
         });

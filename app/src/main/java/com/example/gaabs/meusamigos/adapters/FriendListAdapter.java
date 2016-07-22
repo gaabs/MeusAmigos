@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.gaabs.meusamigos.R;
 import com.example.gaabs.meusamigos.entities.Category;
 import com.example.gaabs.meusamigos.entities.Friend;
+import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,34 +26,19 @@ import java.util.Map;
  * Created by gaabs on 08/07/16.
  */
 public class FriendListAdapter extends BaseAdapter {
-    Context context;
-    ArrayList<Friend> friendList;
-    ArrayList<Category> categoriesList;
-    ArrayList<String> categoriesNames;
+    private Context context;
+    private ArrayList<Friend> friendList;
+    private ArrayList<Category> categoriesList;
+    private ArrayList<String> categoriesNames;
 
     public FriendListAdapter(Context context, ArrayList<Friend> friendList){
         this.context = context;
         this.friendList = friendList;
 
-        SharedPreferences categoriesPreferences = context.getSharedPreferences("categories", Context.MODE_PRIVATE);
-        Map<String,String> categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
-
-        categoriesList = new ArrayList<>();
+        categoriesList = CategoriesManager.getCategories(context);
         categoriesNames = new ArrayList<>();
-        for(Map.Entry<String,String> category : categoriesMap.entrySet()){
-            String categoryData[] = category.getValue().split(",",-1);
-            String name,photo;
-            int color;
-            name = categoryData[0];
-            color = Integer.parseInt(categoryData[1]);
-            photo = categoryData[2];
-
-            for(int i = 0; i < categoryData.length; i++) {
-                Log.i("Category part", String.format("i:%d v:%s",i,categoryData[i]));
-            }
-
-            categoriesList.add(new Category(name,color,photo));
-            categoriesNames.add(name);
+        for(Category category : categoriesList){
+            categoriesNames.add(category.getName());
         }
     }
     @Override

@@ -23,19 +23,18 @@ import java.io.IOException;
 import java.util.Map;
 
 public class CategoryAddActivity extends AppCompatActivity {
-    Uri categoryImageUri;
-    EditText categoryEditText;
-    Spinner colorSpinner;
-    ColorSpinnerAdapter spinnerAdapter;
-    SharedPreferences categoriesPreferences;
-    SharedPreferences.Editor editor;
-    Map<String, ? > categoriesMap;
-    Button categoryPictureButton;
-    Button categoryAddButton;
-    ImageView categoryIcon;
-    Resources resources;
-    String[] colorStrings;
-    int[] colorInts;
+    private EditText categoryEditText;
+    private Spinner colorSpinner;
+    private Button categoryPictureButton;
+    private Button categoryAddButton;
+    private ImageView categoryIcon;
+
+    private Uri categoryImageUri;
+    private SharedPreferences categoriesPreferences;
+    private SharedPreferences.Editor editor;
+    private Map<String, ? > categoriesMap;
+
+    private static int REQUEST_PHOTO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +44,8 @@ public class CategoryAddActivity extends AppCompatActivity {
         categoryEditText = (EditText) findViewById(R.id.categories_add_name_editText);
         colorSpinner = (Spinner) findViewById(R.id.categories_add_color_spinner);
 
-        resources = getResources();
-        colorStrings = resources.getStringArray(R.array.categoriesNames);
-        colorInts = resources.getIntArray(R.array.categoriesColors);
-
-        spinnerAdapter = new ColorSpinnerAdapter(this,colorStrings,colorInts);
-        colorSpinner.setAdapter(spinnerAdapter);
-
-        categoriesPreferences = getSharedPreferences("categories",MODE_PRIVATE);
-        editor = categoriesPreferences.edit();
-        categoriesMap = categoriesPreferences.getAll();
-        Log.i("categoriesAdd", "categories: " + categoriesMap.toString());
+        initColorSpinner();
+        initCategories();
 
         categoryPictureButton = (Button) findViewById(R.id.category_choose_picture_button);
         categoryPictureButton.setOnClickListener(new View.OnClickListener() {
@@ -63,9 +53,8 @@ public class CategoryAddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i("onClick","Clicou para escolher imagem");
                 Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickImageIntent, 1);
+                startActivityForResult(pickImageIntent, REQUEST_PHOTO);
             }
-
 
         });
 
@@ -73,6 +62,7 @@ public class CategoryAddActivity extends AppCompatActivity {
         categoryAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO: Esse tamanho eh oq ou deve ser feito um extract?
                 Log.i("categoryCreateOnClick","Clicou para criar categoria");
                 String name = categoryEditText.getText().toString();
                 int color = (int) colorSpinner.getSelectedItem();
@@ -85,6 +75,9 @@ public class CategoryAddActivity extends AppCompatActivity {
                     Log.i("categoryCreateOnClick","Criou nova categoria=" + name + ":" + categoryData);
                     editor.putString(name,categoryData);
                     editor.commit();
+
+                    // TODO: esse acesso aos Preferences eh Ok ou deve ser modularizado, como no FriendController?
+
                     finish();
                 } else{
                     Toast.makeText(CategoryAddActivity.this, "Ja existe categoria com esse nome!", Toast.LENGTH_SHORT).show();
@@ -94,6 +87,25 @@ public class CategoryAddActivity extends AppCompatActivity {
 
 
         });
+    }
+
+    private void initColorSpinner(){
+        Resources resources;
+        String[] colorStrings;
+        int[] colorInts;
+
+        resources = getResources();
+        colorStrings = resources.getStringArray(R.array.categoriesNames);
+        colorInts = resources.getIntArray(R.array.categoriesColors);
+
+        ColorSpinnerAdapter spinnerAdapter = new ColorSpinnerAdapter(this,colorStrings,colorInts);
+        colorSpinner.setAdapter(spinnerAdapter);
+    }
+
+    private void initCategories(){
+        categoriesPreferences = getSharedPreferences("categories",MODE_PRIVATE);
+        editor = categoriesPreferences.edit();
+        categoriesMap = categoriesPreferences.getAll();
     }
 
     @Override

@@ -25,20 +25,71 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FriendEditActivity extends AppCompatActivity {
-    String oldPhone;
-    Uri imageUri;
-    SQLiteManager dbManager;
-    FriendController friendController;
+    private EditText nameEditText;
+    private EditText phoneEditText;
+    private Button friendPictureButton;
+    private Button friendSaveButton;
+    private Button friendRemoveButton;
+    private Spinner categoriesSpinner;
+
+    private FriendController friendController;
+    private String oldPhone;
+    private Uri imageUri;
+    private ArrayList<Category> categoriesList;
+
+    private static int REQUEST_PHOTO = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // TODO: necessario extract?
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_edit);
 
-        oldPhone = getIntent().getExtras().getString("phone");
-        dbManager = new SQLiteManager(this);
-        friendController = new FriendController(dbManager);
+        friendController = new FriendController(this);
 
+        nameEditText = (EditText) findViewById(R.id.friend_edit_name_editText);
+        phoneEditText = (EditText) findViewById(R.id.friend_edit_phone_editText);
+
+        friendPictureButton = (Button) findViewById(R.id.friend_choose_picture_button);
+        friendPictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickImageIntent,REQUEST_PHOTO);
+            }
+        });
+
+        categoriesSpinner = (Spinner) findViewById(R.id.friend_edit_category_spinner);
+        categoriesList = CategoriesManager.getCategories(this);
+        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
+        categoriesSpinner.setAdapter(categorySpinnerAdapter);
+
+        friendSaveButton = (Button) findViewById(R.id.friend_edit_saveButton);
+        friendSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateFriend();
+                Log.i("FriendEdit","editou");
+                finish();
+            }
+        });
+
+        friendRemoveButton = (Button) findViewById(R.id.friend_edit_removeButton);
+        friendRemoveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeFriend();
+                Log.i("FriendEdit","deletou");
+                finish();
+            }
+        });
+
+        oldPhone = getIntent().getExtras().getString("phone");
+        fillWithFriendData();
+    }
+
+    private void fillWithFriendData(){
         Friend friend = friendController.getFriend(oldPhone);
 
         if (friend.getPhoto() != null) {
@@ -52,69 +103,32 @@ public class FriendEditActivity extends AppCompatActivity {
             }
         }
 
-        final EditText nameEditText = (EditText) findViewById(R.id.friend_edit_name_editText);
         nameEditText.setText(friend.getName());
-        final EditText phoneEditText = (EditText) findViewById(R.id.friend_edit_phone_editText);
         phoneEditText.setText(friend.getPhone());
-
-        Button friendPictureButton = (Button) findViewById(R.id.friend_choose_picture_button);
-
-        friendPictureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickImageIntent,1);
-            }
-        });
-
-        ArrayList<Category> categoriesList = CategoriesManager.getCategories(this);
-
-        final Spinner categoriesSpinner = (Spinner) findViewById(R.id.friend_edit_category_spinner);
-        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
-        categoriesSpinner.setAdapter(categorySpinnerAdapter);
-
         categoriesSpinner.setSelection(getIndex(categoriesList,friend.getCategory()));
+    }
 
-        Button friendSaveButton = (Button) findViewById(R.id.friend_edit_saveButton);
-        friendSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name,phone,category;
+    private void updateFriend(){
+        String name = nameEditText.getText().toString();
+        String phone = phoneEditText.getText().toString();
+        String category = ((Category) categoriesSpinner.getSelectedItem()).getName();
 
-                name = nameEditText.getText().toString();
-                phone = phoneEditText.getText().toString();
-                category = ((Category) categoriesSpinner.getSelectedItem()).getName();
+        Friend friend = new Friend();
+        friend.setName(name);
+        friend.setPhone(phone);
+        friend.setCategory(category);
+        if (imageUri != null) {
+            friend.setPhoto(imageUri.toString());
+        }
 
-                Friend friend = new Friend();
-                friend.setName(name);
-                friend.setPhone(phone);
-                friend.setCategory(category);
-                if (imageUri != null) {
-                    friend.setPhoto(imageUri.toString());
-                }
+        friendController.updateFriend(oldPhone,friend);
+    }
 
-                friendController.updateFriend(oldPhone,friend);
-                Log.i("FriendEdit","editou");
-                finish();
-            }
-        });
+    private void removeFriend(){
+        Friend friend = new Friend();
+        friend.setPhone(oldPhone);
 
-        Button friendRemoveButton = (Button) findViewById(R.id.friend_edit_removeButton);
-        friendRemoveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String phone;
-
-                phone = (getIntent().getExtras().getString("phone"));
-
-                Friend friend = new Friend();
-                friend.setPhone(phone);
-
-                friendController.deleteFriend(friend);
-                Log.i("FriendEdit","deletou");
-                finish();
-            }
-        });
+        friendController.deleteFriend(friend);
     }
 
     @Override

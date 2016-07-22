@@ -16,15 +16,15 @@ import java.util.Arrays;
  * Created by gaabs on 07/07/16.
  */
 public class ColorSpinnerAdapter extends BaseAdapter {
-    Context context;
-    String[] titles;
-    int[] colors;
+    private Context context;
+    private String[] titles;
+    private int[] colors;
+
     public ColorSpinnerAdapter(Context context, String[] titles, int[] colors){
         this.context = context;
         this.titles = titles;
         this.colors = colors;
     }
-
 
     @Override
     public int getCount() {

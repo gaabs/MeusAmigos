@@ -17,8 +17,8 @@ import java.util.ArrayList;
 public class FriendController{
     private SQLiteManager dbManager;
 
-    public FriendController(SQLiteManager dbManager){
-        this.dbManager = dbManager;
+    public FriendController(Context context){
+        this.dbManager = new SQLiteManager(context);
     }
 
     public void addFriend(Friend friend){
@@ -74,6 +74,9 @@ public class FriendController{
         //log
         Log.d("getFriend("+phone+")", friend.toString());
 
+        cursor.close();
+        db.close();
+
         // 5. return friend
         return friend;
     }
@@ -104,6 +107,9 @@ public class FriendController{
         }
 
         Log.d("getAllFriends()", friends.toString());
+
+        cursor.close();
+        db.close();
 
         // return friends
         return friends;

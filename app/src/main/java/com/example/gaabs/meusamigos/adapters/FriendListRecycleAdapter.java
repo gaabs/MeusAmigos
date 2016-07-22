@@ -1,8 +1,7 @@
-package com.example.gaabs.meusamigos.activities;
+package com.example.gaabs.meusamigos.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -17,22 +16,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gaabs.meusamigos.R;
+import com.example.gaabs.meusamigos.activities.FriendEditActivity;
 import com.example.gaabs.meusamigos.entities.Category;
 import com.example.gaabs.meusamigos.entities.Friend;
 import com.example.gaabs.meusamigos.util.CategoriesManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by gaabs on 08/07/16.
  */
 public class FriendListRecycleAdapter extends RecyclerView.Adapter<FriendListRecycleAdapter.FriendHolder> {
-    static Context context;
-    static ArrayList<Friend> friendList;
-    ArrayList<String> categoriesNames;
-    ArrayList<Category> categoriesList;
+    private static Context context;
+    private static ArrayList<Friend> friendList;
+    private ArrayList<String> categoriesNames;
+    private ArrayList<Category> categoriesList;
 
     public FriendListRecycleAdapter(Context context, ArrayList<Friend> friendList){
         this.context = context;

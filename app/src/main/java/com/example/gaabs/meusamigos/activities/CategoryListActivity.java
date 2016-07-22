@@ -16,10 +16,8 @@ import com.example.gaabs.meusamigos.util.CategoriesManager;
 import java.util.ArrayList;
 
 public class CategoryListActivity extends AppCompatActivity {
-    ListView categoryListView;
-    ArrayList<Category> categoriesList;
-    CategoryListAdapter categoriesAdapter;
-    Button addButton;
+    private ListView categoryListView;
+    private Button addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +39,8 @@ public class CategoryListActivity extends AppCompatActivity {
         super.onStart();
         categoryListView = (ListView) findViewById(R.id.categories_listView);
 
-        categoriesList = CategoriesManager.getCategories(this);
-        Log.i("categoriesList", "categories: " + categoriesList.toString());
-        categoriesAdapter = new CategoryListAdapter(this, categoriesList);
+        ArrayList<Category> categoriesList = CategoriesManager.getCategories(this);
+        CategoryListAdapter categoriesAdapter = new CategoryListAdapter(this, categoriesList);
         categoryListView.setAdapter(categoriesAdapter);
     }
 }

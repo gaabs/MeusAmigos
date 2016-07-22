@@ -16,8 +16,8 @@ import java.util.ArrayList;
  * Created by gaabs on 07/07/16.
  */
 public class CategorySpinnerAdapter extends BaseAdapter {
-    Context context;
-    ArrayList<Category> categoriesList;
+    private Context context;
+    private ArrayList<Category> categoriesList;
 
     public CategorySpinnerAdapter(Context context,ArrayList<Category> categoriesList){
         this.context = context;
@@ -41,8 +41,10 @@ public class CategorySpinnerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.spinner_text, null);
+        if (view == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.spinner_text, null);
+        }
         TextView text = (TextView) view.findViewById(R.id.spinner_text);
 
         Category category = categoriesList.get(i);

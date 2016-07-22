@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.gaabs.meusamigos.adapters.FriendListRecycleAdapter;
 import com.example.gaabs.meusamigos.database.FriendController;
 import com.example.gaabs.meusamigos.database.SQLiteManager;
 import com.example.gaabs.meusamigos.R;
@@ -30,8 +31,7 @@ public class FriendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        dbManager = new SQLiteManager(FriendListActivity.this);
-        friendController = new FriendController(dbManager);
+        friendController = new FriendController(this);
 
         Button importButton = (Button) findViewById(R.id.friend_import_button);
         importButton.setOnClickListener(new View.OnClickListener() {

@@ -22,8 +22,8 @@ import java.util.ArrayList;
  * Created by gaabs on 08/07/16.
  */
 public class CategoryListAdapter extends BaseAdapter {
-    Context context;
-    ArrayList<Category> categoriesList;
+    private Context context;
+    private ArrayList<Category> categoriesList;
 
     public CategoryListAdapter(Context context,ArrayList<Category> categoriesList){
         this.context = context;
@@ -46,13 +46,13 @@ public class CategoryListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.item_category, null);
+        if (view == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.item_category, null);
+        }
         TextView name = (TextView) view.findViewById(R.id.category_name_textView);
         ImageView photo = (ImageView) view.findViewById(R.id.category_photo_imageView);
         Category category = categoriesList.get(i);
-
-        //Log.i("CategoryAdapter", category.toString());
 
         name.setText(category.getName());
 

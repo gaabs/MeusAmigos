@@ -24,16 +24,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class FriendAddActivity extends AppCompatActivity {
-    Uri imageUri;
-    EditText nameEditText;
-    EditText phoneEditText;
-    Button friendPictureButton;
-    ArrayList<Category> categoriesList;
-    Spinner categoriesSpinner;
-    CategorySpinnerAdapter categorySpinnerAdapter;
-    Button friendAddButton;
-    SQLiteManager dbManager;
-    FriendController friendController;
+    private EditText nameEditText;
+    private EditText phoneEditText;
+    private Button friendAddButton;
+    private Button friendPictureButton;
+    private Spinner categoriesSpinner;
+
+    private Uri imageUri;
+    private FriendController friendController;
+
+    private static int REQUEST_PHOTO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,29 +48,29 @@ public class FriendAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickImageIntent,1);
+                startActivityForResult(pickImageIntent,REQUEST_PHOTO);
             }
         });
 
-        categoriesList = CategoriesManager.getCategories(this);
         categoriesSpinner = (Spinner) findViewById(R.id.friend_add_category_spinner);
-        categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
+        ArrayList<Category> categoriesList = CategoriesManager.getCategories(this);
+        CategorySpinnerAdapter categorySpinnerAdapter = new CategorySpinnerAdapter(this, categoriesList);
         categoriesSpinner.setAdapter(categorySpinnerAdapter);
 
-        dbManager = new SQLiteManager(this);
-        friendController = new FriendController(dbManager);
+        friendController = new FriendController(this);
 
         friendAddButton = (Button) findViewById(R.id.friend_add_addButton);
         friendAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name,phone,category,photo;
+                // TODO: Esse tamanho eh oq ou deve ser feito um extract?
+                String name = nameEditText.getText().toString();
+                String phone = phoneEditText.getText().toString();
+                String category = null;
 
-                name = nameEditText.getText().toString();
-                phone = phoneEditText.getText().toString();
-                category = null;
-                if (categoriesSpinner.getSelectedItem() != null)
+                if (categoriesSpinner.getSelectedItem() != null) {
                     category = ((Category) categoriesSpinner.getSelectedItem()).getName();
+                }
 
                 Friend friend = new Friend();
                 friend.setName(name);

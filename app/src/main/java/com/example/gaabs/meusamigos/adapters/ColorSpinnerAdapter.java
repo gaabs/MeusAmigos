@@ -43,8 +43,10 @@ public class ColorSpinnerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.spinner_text, null);
+        if (view == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.spinner_text, null);
+        }
         TextView text = (TextView) view.findViewById(R.id.spinner_text);
         text.setText(titles[i]);
 //        text.setTextColor(colors[i]);

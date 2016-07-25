@@ -15,7 +15,7 @@ import java.util.Map;
 public class CategoriesManager {
 
     public static ArrayList<Category> getCategories(Context context){
-        SharedPreferences categoriesPreferences = context.getSharedPreferences("categories", context.MODE_PRIVATE);
+        SharedPreferences categoriesPreferences = context.getSharedPreferences("categories", Context.MODE_PRIVATE);
         Map<String, String> categoriesMap = (Map<String,String>) categoriesPreferences.getAll();
 
         ArrayList<Category> categoriesList = new ArrayList<>();

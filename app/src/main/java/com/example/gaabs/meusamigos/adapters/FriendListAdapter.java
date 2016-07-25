@@ -58,8 +58,10 @@ public class FriendListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.item_friend, null);
+        if (view == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            view = inflater.inflate(R.layout.item_friend, null);
+        }
         ImageView photo = (ImageView) view.findViewById(R.id.friend_photo_imageView);
         TextView name = (TextView) view.findViewById(R.id.friend_name_textView);
         TextView phone = (TextView) view.findViewById(R.id.friend_phone_textView);

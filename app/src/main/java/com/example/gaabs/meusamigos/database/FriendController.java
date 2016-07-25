@@ -92,7 +92,7 @@ public class FriendController{
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build friend and add it to list
-        Friend friend = null;
+        Friend friend;
         if (cursor.moveToFirst()) {
             do {
                 friend = new Friend();

@@ -2,6 +2,7 @@ package com.example.gaabs.meusamigos.activities;
 
 import android.content.AsyncTaskLoader;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,11 +18,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        AsyncTaskLoader taskLoader = new AsyncTaskLoader(this) {
+        AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
             @Override
-            public Object loadInBackground() {
+            protected Void doInBackground(Void... voids) {
                 try {
-                    wait(DELAY_TIME);
+                    synchronized (this) {
+                        wait(DELAY_TIME);
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
@@ -32,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 return null;
             }
         };
-        taskLoader.loadInBackground();
+        asyncTask.execute();
 
     }
 
